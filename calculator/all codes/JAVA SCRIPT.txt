@@ -1,0 +1,59 @@
+let display = document.getElementById("display");
+
+function appendValue(value) {
+  display.value += value;
+}
+
+function clearDisplay() {
+  display.value = "";
+}
+
+function backspace() {
+  display.value = display.value.slice(0, -1);
+}
+
+function calculate() {
+  try {
+    display.value = eval(display.value);
+  } catch {
+    display.value = "Error";
+  }
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
+  if (document.body.classList.contains("dark")) {
+    document.body.style.background = "linear-gradient(135deg, #000000, #434343)";
+    document.querySelector(".calculator").style.background = "rgba(0,0,0,0.6)";
+    document.querySelector(".display").style.background = "rgba(0,0,0,0.4)";
+    document.querySelector(".display").style.color = "#fff";
+  } else {
+    document.body.style.background = "linear-gradient(135deg, #667eea, #764ba2)";
+    document.querySelector(".calculator").style.background = "rgba(255,255,255,0.15)";
+    document.querySelector(".display").style.background = "rgba(255,255,255,0.3)";
+    document.querySelector(".display").style.color = "#000";
+  }
+}
+
+// ✅ Keyboard Support
+document.addEventListener("keydown", (event) => {
+  const key = event.key;
+
+  if (!isNaN(key)) {
+    // Numbers (0–9)
+    appendValue(key);
+  } else if (["+", "-", "*", "/", "%", "."].includes(key)) {
+    // Operators
+    appendValue(key);
+  } else if (key === "Enter" || key === "=") {
+    // Enter or = → Calculate
+    event.preventDefault();
+    calculate();
+  } else if (key === "Backspace") {
+    // Backspace → Delete last char
+    backspace();
+  } else if (key === "Escape") {
+    // Escape → Clear
+    clearDisplay();
+  }
+});
